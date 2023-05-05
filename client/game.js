@@ -1,4 +1,3 @@
-import randomWords from 'random-words'
 
 const startContainer = document.getElementById('start-container');
 const gameContainer = document.getElementById('game-container');
@@ -6,24 +5,64 @@ const startGameButton = document.getElementById('start-game-button');
 const howToPlayButton = document.getElementById('how-to-play-button');
 const modal = document.getElementById('modal');
 const closeModalButton = document.getElementById('close-modal');
-
-const definitionCategory = document.getElementById('definition').innerText;
-const definition = document.getElementById('definition').innerText;
-const correctCount = document.getElementById('correct-count').innerText;
-const time = document.getElementById('time').innerText;
 const wordInput = document.getElementById('word-input');
 
-let userInput = '';
-let timeLeft = 30;
-const wordsGenerated = [...randomWords(20)];
+const definitionCategory = document.getElementById('definition');
+const definition = document.getElementById('definition');
+const correctCount = document.getElementById('correct-count');
+const time = document.getElementById('time');
 
-while (timeLeft != 0) {
-    timeLeft--;
+
+let inputValue = wordInput.value;
+let isGameOver = true;
+let testWord = 'word'
+
+class Game {
+    static timeLeft = 30;
+    static wordsGenerated = [];
+    static wordsCompleted = {};
+    static correctCount = 0;
+
+    static startGame() {
+        this.generateWords();
+        isGameOver = false;
+        wordInput.focus();
+        const gameClock = setInterval(() => {
+            if (this.timeLeft > 0) {
+                this.timeLeft--;
+                time.textContent = this.timeLeft;
+            } else {
+                clearInterval(gameClock);
+                this.endGame();
+            }
+        }, 1000);
+    }
+
+
+    static endGame() {
+        isGameOver = true;
+    }
+
+    static generateWords() {
+
+    }
+
+    static checkInput(input) {
+        if (input === testWord) {
+            this.timeLeft += 6;
+            this.correctCount++;
+            correctCount.textContent = this.correctCount;
+            wordInput.value = '';
+            inputValue = '';
+        }
+    }
 }
+
 
 startGameButton.addEventListener('click', () => {
     startContainer.style.display = 'none';
     gameContainer.style.display = 'flex';
+    Game.startGame();
 });
 
 howToPlayButton.addEventListener('click', () => {
@@ -37,5 +76,10 @@ closeModalButton.addEventListener('click', () => {
 });
 
 wordInput.addEventListener('keydown', (event) => {
-    userInput
+    if (event.key === 'Backspace') {
+        inputValue = inputValue.slice(0, inputValue.length - 1)
+    } else {
+        inputValue += event.key;
+    }
+    Game.checkInput(inputValue);
 })
