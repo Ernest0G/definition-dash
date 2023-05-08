@@ -6,25 +6,26 @@ const howToPlayButton = document.getElementById('how-to-play-button');
 const modal = document.getElementById('modal');
 const closeModalButton = document.getElementById('close-modal');
 const wordInput = document.getElementById('word-input');
-
 const definitionCategory = document.getElementById('definition');
 const definition = document.getElementById('definition');
 const correctCount = document.getElementById('correct-count');
 const time = document.getElementById('time');
 
-
 let inputValue = wordInput.value;
 let isGameOver = true;
-let testWord = 'word'
-
+let setCurrentWord = {};
 class Game {
     static timeLeft = 30;
     static wordsGenerated = [];
-    static wordsCompleted = {};
+    static wordsCompleted = [];
+    static wordsToDefine = [];
     static correctCount = 0;
 
     static startGame() {
-        this.generateWords();
+        this.wordsToDefine.push(...this.generateWords(1));
+        console.log(this.wordsToDefine)
+        this.getWordDefinition();
+        this.setCurrentWord();
         isGameOver = false;
         wordInput.focus();
         const gameClock = setInterval(() => {
@@ -38,23 +39,69 @@ class Game {
         }, 1000);
     }
 
+    static generateWords(numberOfWords) {
+        let words = [];
 
-    static endGame() {
-        isGameOver = true;
+        for (let i = 0; i < numberOfWords; i++) {
+            fetch(`https://random-word-api.herokuapp.com/word`)
+                .then(response => response.json())
+                .then(data => {
+                    words.push(...data)
+                })
+        }
+
+        return words;
     }
 
-    static generateWords() {
+    static generateRandomNumber(length) {
+        return Math.floor(Math.random() * length)
+    }
 
+    static async getWordDefinition() {
+        const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${this.wordsToDefine[correctCount]}`
+        console.log(this.wordsToDefine[0])
+        await fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                const wordData = data[this.generateRandomNumber(data.length)];
+                const meanings = wordData.meanings;
+                const randomMeaningsIndex = this.generateRandomNumber(meanings.length)
+                const randomMeaning = meanings[randomMeaningsIndex]
+                const definitions = randomMeaning.definitions;
+                const randomDefinitionIndex = this.generateRandomNumber(definitions.length);
+                const randomDefinition = definitions[randomDefinitionIndex].definition;
+
+                this.wordsGenerated.push({
+                    word: wordData.word,
+                    definition: randomDefinition,
+                    partOfSpeech: randomMeaning.partOfSpeech
+                })
+            })
+        console.log(this.wordsGenerated)
     }
 
     static checkInput(input) {
-        if (input === testWord) {
+        if (input === setCurrentWord.word && !isGameOver) {
+            inputValue = '';
+            wordInput.value = '';
             this.timeLeft += 6;
             this.correctCount++;
             correctCount.textContent = this.correctCount;
-            wordInput.value = '';
-            inputValue = '';
+            this.setCurrentWord();
         }
+    }
+
+    static setCurrentWord() {
+        const currentWord = this.wordsGenerated[correctCount];
+        definitionCategory.textContent = currentWord.partOfSpeech;
+        definition.textContent = currentWord.definition;
+
+    }
+
+    static endGame() {
+        isGameOver = true;
+        this.wordsCompleted = this.wordsGenerated.splice(0, correctCount - 1)
     }
 }
 
