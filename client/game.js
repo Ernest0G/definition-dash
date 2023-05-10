@@ -24,10 +24,11 @@ class Game {
   static currentWord;
 
   static async startGame() {
-    await this.generateWords(5);
-    await this.getWordDefinition(5).then(() => {
+    await this.generateWords(2);
+    await this.getWordDefinition(2).then(() => {
       this.setCurrentWord();
-    });
+    })
+    console.log({ 'Words Defined': this.wordsGenerated })
     isGameOver = false;
     wordInput.focus();
     const gameClock = setInterval(() => {
@@ -42,11 +43,10 @@ class Game {
   }
 
   static async generateWords(numberOfWords) {
-    const response = await fetch(
-      `https://random-word-api.herokuapp.com/word?number=${numberOfWords}`
-    );
+    const response = await fetch(`http://localhost:5000/randomWord/${numberOfWords}`);
     const data = await response.json();
-    this.wordsToDefine.push(...data);
+    this.wordsToDefine.push(data);
+    console.log({ 'Words Generated': this.wordsToDefine })
   }
 
   static generateRandomNumber(length) {
@@ -54,28 +54,31 @@ class Game {
   }
 
   static async getWordDefinition(defineCount) {
-    for (let i = correctCount; i < correctCount + defineCount; i++) {
-      const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${
-        this.wordsToDefine[this.correctCount]
-      }`;
+    for (let i = this.correctCount; i < this.correctCount + defineCount; i++) {
+      const url = `http://localhost:5000/defineWord/${this.wordsToDefine[i]}`;
       const response = await fetch(url);
       const data = await response.json();
-      const wordData = data[0];
-      const meanings = wordData.meanings;
-      const randomMeaningsIndex = this.generateRandomNumber(meanings.length);
-      const randomMeaning = meanings[randomMeaningsIndex];
-      const definitions = randomMeaning.definitions;
-      const randomDefinitionIndex = this.generateRandomNumber(
-        definitions.length
-      );
-      const randomDefinition = definitions[randomDefinitionIndex].definition;
-      this.wordsGenerated.push({
-        word: wordData.word,
-        definition: randomDefinition,
-        partOfSpeech: randomMeaning.partOfSpeech,
-      });
+      console.log(data)
+      // const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${this.wordsToDefine[i]
+      //   }`;
+      // console.log({ 'Word to Be Defined': this.wordsToDefine[i] })
+      // const response = await fetch(url);
+      // const data = await response.json();
+      // const wordData = data[0];
+      // const meanings = wordData.meanings;
+      // const randomMeaningsIndex = this.generateRandomNumber(meanings.length);
+      // const randomMeaning = meanings[randomMeaningsIndex];
+      // const definitions = randomMeaning.definitions;
+      // const randomDefinitionIndex = this.generateRandomNumber(
+      //   definitions.length
+      // );
+      // const randomDefinition = definitions[randomDefinitionIndex].definition;
+      // this.wordsGenerated.push({
+      //   word: wordData.word,
+      //   definition: randomDefinition,
+      //   partOfSpeech: randomMeaning.partOfSpeech,
+      // });
     }
-    console.log(this.wordsGenerated);
   }
 
   static skipWord() {
@@ -90,15 +93,17 @@ class Game {
       this.correctCount++;
       correctCount.textContent = this.correctCount;
       this.setCurrentWord();
-      //I need to make sure there are generated words and defintions ahead of time
+      //I need to make sure there are generated words and definitions ahead of time
       if (this.correctCount >= this.wordsGenerated.length - 2) {
-        this.generateWords(3);
-        this.getWordDefinition(3);
+        this.generateWords(3).then(() => {
+          this.getWordDefinition(3);
+        });
+
       }
     }
   }
 
-  static setCurrentWord() {
+  static async setCurrentWord() {
     this.currentWord = this.wordsGenerated[this.correctCount];
     definitionPartOfSpeech.textContent = this.currentWord.partOfSpeech;
     definition.textContent = this.currentWord.definition;
