@@ -122,3 +122,15 @@ body {
 .game-stat {
   font-size: 2rem;
 }
+
+#words-encountered {
+  width: 100%;
+  height: 350px;
+  display: flex;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+#words-encountered-table {
+  gap: 5px;
+}

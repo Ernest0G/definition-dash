@@ -15,7 +15,7 @@ app.get("/randomWord/:numberOfWords/:difficulty", async (req, res) => {
   const difficulty = {};
   switch (difficultyChosen) {
     case "Easy":
-      difficulty.min = 2;
+      difficulty.min = 3;
       difficulty.max = 5;
       break;
     case "Medium":

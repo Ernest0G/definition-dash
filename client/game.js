@@ -21,8 +21,15 @@ const definition = document.getElementById("definition");
 const correctCount = document.getElementById("correct-count");
 const time = document.getElementById("time");
 
+const GameOverModal = document.getElementById("game-over-modal");
+const replayGameButton = document.getElementById("replay-game-button");
+const startMenuButton = document.getElementById("start-menu-button");
+const wordsEncounteredTable = document.getElementById(
+  "words-encountered-table"
+);
+
 class Game {
-  static timeLeft = 60;
+  static timeLeft = 10;
   static wordsGenerated = [];
   static wordsCompleted = [];
   static correctCount = 0;
@@ -82,11 +89,29 @@ class Game {
     this.currentWord = this.wordsGenerated[this.correctCount];
     partOfSpeech.textContent = this.currentWord.partOfSpeech;
     definition.textContent = this.currentWord.definition;
+    console.log(this.currentWord);
   }
 
   static endGame() {
     this.isGameOver = true;
-    this.wordsCompleted = this.wordsGenerated.splice(0, correctCount - 1);
+    this.wordsCompleted = this.wordsGenerated.splice(0, this.correctCount);
+    let tableRows = `
+    <tr>
+      <th>Word</th>
+      <th>Definition</th>
+      <th>Part of Speech</th>
+    </tr>`;
+    for (let i = 0; i < this.wordsCompleted.length; i++) {
+      tableRows += `
+        <tr>
+          <td>${this.wordsCompleted[i].word}</td>
+          <td>${this.wordsCompleted[i].partOfSpeech}</td>
+          <td>${this.wordsCompleted[i].definition}</td>
+        </tr>
+      `;
+    }
+    wordsEncounteredTable.innerHTML = tableRows;
+    GameOverModal.style.display = "flex";
   }
 }
 

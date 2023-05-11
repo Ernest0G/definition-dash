@@ -50,7 +50,7 @@
         <option value="Medium">Medium</option>
         <option value="Hard">Hard</option>
       </select>
-      <div id="start-optons-buttons">
+      <div>
         <button class="button modal-button" id="close-start-options-modal">
           Close
         </button>
@@ -72,6 +72,43 @@
       <button class="button modal-button" id="close-how-to-play-modal">
         Close
       </button>
+    </dialog>
+
+    <dialog class="modal" id="game-over-modal" style="display: flex">
+      <h2>Game Over</h2>
+      <p>Here are the words you encountered</p>
+      <div id="words-encountered">
+        <table id="words-encountered-table">
+          <tr>
+            <th>Word</th>
+            <th>Definition</th>
+            <th>Part of Speech</th>
+          </tr>
+          <tr>
+            <td>Fish</td>
+            <td>It swims</td>
+            <td>noun</td>
+          </tr>
+          <tr>
+            <td>Test</td>
+            <td>Something to test the test</td>
+            <td>verb</td>
+          </tr>
+          <tr>
+            <td>TestTest 123</td>
+            <td>A way for me to test how this looks</td>
+            <td>verb</td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <button class="button modal-button" id="start-menu-button">
+          Start Menu
+        </button>
+        <button class="button modal-button" id="replay-game-button">
+          Replay Game
+        </button>
+      </div>
     </dialog>
 
     <script type="module" src="game.js"></script>
