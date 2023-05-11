@@ -12,9 +12,6 @@ const definition = document.getElementById("definition");
 const correctCount = document.getElementById("correct-count");
 const time = document.getElementById("time");
 
-let inputValue = wordInput.value;
-let isGameOver = true;
-
 class Game {
   static timeLeft = 60;
   static wordsGenerated = [];
@@ -22,14 +19,16 @@ class Game {
   static wordsToDefine = [];
   static correctCount = 0;
   static currentWord;
+  static inputValue = wordInput.value;
+  static isGameOver = true;
 
   static async startGame() {
-    await this.generateWords(2);
-    await this.getWordDefinition(2).then(() => {
-      this.setCurrentWord();
-    })
-    console.log({ 'Words Defined': this.wordsGenerated })
-    isGameOver = false;
+    await this.generateWords(5);
+    // await this.getWordDefinition(5).then(() => {
+    //   this.setCurrentWord();
+    // })
+    console.log(this.wordsGenerated)
+    this.isGameOver = false;
     wordInput.focus();
     const gameClock = setInterval(() => {
       if (this.timeLeft > 0) {
@@ -42,11 +41,25 @@ class Game {
     }, 1000);
   }
 
+  static async testAPI() {
+    //This generates a random word and also defines it
+    const url = `https://api.datamuse.com/words?max=10&random=true`;
+    const response = await fetch(url);
+    const words = await response.json();
+    console.log(words)
+    return words.map(wordObj => wordObj.word);
+  }
+
   static async generateWords(numberOfWords) {
-    const response = await fetch(`http://localhost:5000/randomWord/${numberOfWords}`);
-    const data = await response.json();
-    this.wordsToDefine.push(data);
-    console.log({ 'Words Generated': this.wordsToDefine })
+    try {
+      const response = await fetch(`http://localhost:5000/randomWord/${numberOfWords}`);
+      const data = await response.json();
+      this.wordsToDefine.push(...data);
+      console.log({ 'Words Generated': this.wordsToDefine })
+    } catch (error) {
+      console.log(error)
+    }
+
   }
 
   static generateRandomNumber(length) {
@@ -59,20 +72,6 @@ class Game {
       const response = await fetch(url);
       const data = await response.json();
       console.log(data)
-      // const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${this.wordsToDefine[i]
-      //   }`;
-      // console.log({ 'Word to Be Defined': this.wordsToDefine[i] })
-      // const response = await fetch(url);
-      // const data = await response.json();
-      // const wordData = data[0];
-      // const meanings = wordData.meanings;
-      // const randomMeaningsIndex = this.generateRandomNumber(meanings.length);
-      // const randomMeaning = meanings[randomMeaningsIndex];
-      // const definitions = randomMeaning.definitions;
-      // const randomDefinitionIndex = this.generateRandomNumber(
-      //   definitions.length
-      // );
-      // const randomDefinition = definitions[randomDefinitionIndex].definition;
       // this.wordsGenerated.push({
       //   word: wordData.word,
       //   definition: randomDefinition,
@@ -86,9 +85,8 @@ class Game {
   }
 
   static checkInput(input) {
-    if (input === this.currentWord.word && !isGameOver) {
-      inputValue = "";
-      wordInput.value = "";
+    if (input === this.currentWord.word && !this.isGameOver) {
+      this.inputValue, wordInput.value = "";
       this.timeLeft += 6;
       this.correctCount++;
       correctCount.textContent = this.correctCount;
@@ -111,7 +109,7 @@ class Game {
   }
 
   static endGame() {
-    isGameOver = true;
+    this.isGameOver = true;
     this.wordsCompleted = this.wordsGenerated.splice(0, correctCount - 1);
   }
 }
@@ -125,6 +123,7 @@ startGameButton.addEventListener("click", () => {
 howToPlayButton.addEventListener("click", () => {
   modal.showModal();
   modal.style.display = "flex";
+  Game.testAPI()
 });
 
 closeModalButton.addEventListener("click", () => {
@@ -134,9 +133,9 @@ closeModalButton.addEventListener("click", () => {
 
 wordInput.addEventListener("keydown", (event) => {
   if (event.key === "Backspace") {
-    inputValue = inputValue.slice(0, inputValue.length - 1);
+    Game.inputValue = Game.inputValue.slice(0, Game.inputValue.length - 1);
   } else {
-    inputValue += event.key;
+    Game.inputValue += event.key;
   }
-  Game.checkInput(inputValue);
+  Game.checkInput(Game.inputValue);
 });
