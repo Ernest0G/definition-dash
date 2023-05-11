@@ -44,7 +44,7 @@ body {
   letter-spacing: 15px;
 }
 
-#modal {
+.modal {
   width: 1200px;
   height: 800px;
   display: none;
@@ -59,8 +59,15 @@ body {
   z-index: 9999;
 }
 
-#close-modal {
+.modal-button {
   background-color: #487a8b;
+}
+
+#difficulty {
+  width: 400px;
+  height: 50px;
+  font-size: 2rem;
+  text-align: center;
 }
 
 /* GAME PAGE */

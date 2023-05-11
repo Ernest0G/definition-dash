@@ -1,9 +1,20 @@
+//Start Menu Elements
 const startContainer = document.getElementById("start-container");
 const gameContainer = document.getElementById("game-container");
-const startGameButton = document.getElementById("start-game-button");
+const gameSetUpButton = document.getElementById("game-setup-button");
 const howToPlayButton = document.getElementById("how-to-play-button");
-const modal = document.getElementById("modal");
-const closeModalButton = document.getElementById("close-modal");
+const howToPLayModal = document.getElementById("how-to-play-modal");
+const closeHowToPlayModalButton = document.getElementById(
+  "close-how-to-play-modal"
+);
+const startOptionsModal = document.getElementById("start-options-modal");
+const startGameButton = document.getElementById("start-game-button");
+const closeStartOptionsModalButton = document.getElementById(
+  "close-start-options-modal"
+);
+const difficultySelector = document.getElementById("difficulty");
+
+//Game Screen ELements
 const wordInput = document.getElementById("word-input");
 const partOfSpeech = document.getElementById("part-of-speech");
 const definition = document.getElementById("definition");
@@ -14,10 +25,10 @@ class Game {
   static timeLeft = 60;
   static wordsGenerated = [];
   static wordsCompleted = [];
-  static wordsToDefine = [];
   static correctCount = 0;
   static currentWord;
   static isGameOver = true;
+  static gameDifficulty;
 
   static async startGame() {
     await this.generateWords(4);
@@ -37,13 +48,13 @@ class Game {
   }
 
   static async generateWords(numberOfWords) {
-    const url = `http://localhost:5000/randomWord/${numberOfWords}`;
+    const url = `http://localhost:5000/randomWord/${numberOfWords}/${this.gameDifficulty}`;
     try {
       const response = await fetch(url);
       const data = await response.json();
       this.wordsGenerated.push(...data);
     } catch (error) {
-      console.log(error);
+      console.log({ error: error.message });
     }
   }
 
@@ -71,7 +82,6 @@ class Game {
     this.currentWord = this.wordsGenerated[this.correctCount];
     partOfSpeech.textContent = this.currentWord.partOfSpeech;
     definition.textContent = this.currentWord.definition;
-    console.log(this.currentWord);
   }
 
   static endGame() {
@@ -80,20 +90,33 @@ class Game {
   }
 }
 
-startGameButton.addEventListener("click", () => {
-  startContainer.style.display = "none";
-  gameContainer.style.display = "flex";
-  Game.startGame();
+gameSetUpButton.addEventListener("click", () => {
+  startOptionsModal.showModal();
+  startOptionsModal.style.display = "flex";
+});
+
+closeStartOptionsModalButton.addEventListener("click", () => {
+  startOptionsModal.close();
+  startOptionsModal.style.display = "none";
 });
 
 howToPlayButton.addEventListener("click", () => {
-  modal.showModal();
-  modal.style.display = "flex";
+  howToPLayModal.showModal();
+  howToPLayModal.style.display = "flex";
 });
 
-closeModalButton.addEventListener("click", () => {
-  modal.close();
-  modal.style.display = "none";
+closeHowToPlayModalButton.addEventListener("click", () => {
+  howToPLayModal.close();
+  howToPLayModal.style.display = "none";
+});
+
+startGameButton.addEventListener("click", () => {
+  startOptionsModal.close();
+  startOptionsModal.style.display = "none";
+  Game.gameDifficulty = difficultySelector.value;
+  startContainer.style.display = "none";
+  gameContainer.style.display = "flex";
+  Game.startGame();
 });
 
 wordInput.addEventListener("keyup", () => {

@@ -19,7 +19,7 @@
     <div id="container">
       <div id="start-container">
         <h1 class="title">DICTIONARY DASH</h1>
-        <button class="button" id="start-game-button">Start Game</button>
+        <button class="button" id="game-setup-button">Game Setup</button>
         <button class="button" id="how-to-play-button">How to Play</button>
       </div>
 
@@ -42,7 +42,25 @@
       </div>
     </div>
 
-    <dialog id="modal">
+    <dialog class="modal" id="start-options-modal">
+      <h2>Game Set Up</h2>
+      <label for="difficulty">Select the game difficulty:</label>
+      <select id="difficulty" name="difficulty">
+        <option value="Easy">Easy</option>
+        <option value="Medium">Medium</option>
+        <option value="Hard">Hard</option>
+      </select>
+      <div id="start-optons-buttons">
+        <button class="button modal-button" id="close-start-options-modal">
+          Close
+        </button>
+        <button class="button modal-button" id="start-game-button">
+          Start Game
+        </button>
+      </div>
+    </dialog>
+
+    <dialog class="modal" id="how-to-play-modal">
       <h2>How To Play</h2>
       <p>
         Welcome to Dictionary Dash! Your objective is to provide a match to the
@@ -51,7 +69,9 @@
         the game ends. Don't worry though, with every correct answer, you'll
         earn an additional 5 seconds on your timer.
       </p>
-      <button class="button" id="close-modal">Close</button>
+      <button class="button modal-button" id="close-how-to-play-modal">
+        Close
+      </button>
     </dialog>
 
     <script type="module" src="game.js"></script>
