@@ -1,116 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="./assets//icon//logo.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Libre+Bodoni&display=swap"
-      rel="stylesheet"
-    />
-    <link href="styles.css" rel="stylesheet" />
-    <title>Dictionary Dash</title>
-  </head>
 
-  <body>
-    <div id="container">
-      <div id="start-container">
-        <h1 class="title">DICTIONARY DASH</h1>
-        <button class="button" id="game-setup-button">Game Setup</button>
-        <button class="button" id="how-to-play-button">How to Play</button>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="./assets//icon//logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Bodoni&display=swap" rel="stylesheet" />
+  <link href="styles.css" rel="stylesheet" />
+  <title>Dictionary Dash</title>
+</head>
 
-      <div id="game-container">
-        <h1 class="title">DICTIONARY DASH</h1>
-        <div id="definition-container">
-          <span id="part-of-speech"></span>
-          <span id="definition"></span>
-        </div>
-        <div id="game-stats">
-          <div class="game-stat">
-            Correct Guesses: <span id="correct-count">0</span>
-          </div>
-          <div class="game-stat">Time Left: <span id="time">60</span>s</div>
-        </div>
-        <h4 id="directions">
-          Enter the word associated with the definition above
-        </h4>
-        <input id="word-input" autofocus />
-      </div>
+<body>
+  <div id="container">
+    <div id="start-container">
+      <h1 class="title">DICTIONARY DASH</h1>
+      <button class="button" id="game-setup-button">Game Setup</button>
+      <button class="button" id="how-to-play-button">How to Play</button>
     </div>
 
-    <dialog class="modal" id="start-options-modal">
-      <h2>Game Set Up</h2>
-      <label for="difficulty">Select the game difficulty:</label>
-      <select id="difficulty" name="difficulty">
-        <option value="Easy">Easy</option>
-        <option value="Medium">Medium</option>
-        <option value="Hard">Hard</option>
-      </select>
-      <div>
-        <button class="button modal-button" id="close-start-options-modal">
-          Close
-        </button>
-        <button class="button modal-button" id="start-game-button">
-          Start Game
-        </button>
+    <div id="game-container">
+      <h1 class="title">DICTIONARY DASH</h1>
+      <div id="definition-container">
+        <span id="part-of-speech"></span>
+        <span id="definition"></span>
       </div>
-    </dialog>
+      <div id="game-stats">
+        <div class="game-stat">
+          Correct Guesses: <span id="correct-count">0</span>
+        </div>
+        <div class="game-stat">Time Left: <span id="time">60</span>s</div>
+      </div>
+      <h4 id="directions">
+        Enter the word associated with the definition above
+      </h4>
+      <input id="word-input" autofocus />
+    </div>
+  </div>
 
-    <dialog class="modal" id="how-to-play-modal">
-      <h2>How To Play</h2>
-      <p>
-        Welcome to Dictionary Dash! Your objective is to provide a match to the
-        given definition by inputting its corresponding word. You will have 60
-        seconds to rack up as many points as possible. When the timer reaches 0,
-        the game ends. Don't worry though, with every correct answer, you'll
-        earn an additional 5 seconds on your timer.
-      </p>
-      <button class="button modal-button" id="close-how-to-play-modal">
+  <dialog class="modal" id="start-options-modal">
+    <h2>Game Set Up</h2>
+    <label for="difficulty">Select the game difficulty:</label>
+    <select id="difficulty" name="difficulty">
+      <option value="Easy">Easy</option>
+      <option value="Medium">Medium</option>
+      <option value="Hard">Hard</option>
+    </select>
+    <div>
+      <button class="button modal-button" id="close-start-options-modal">
         Close
       </button>
-    </dialog>
+      <button class="button modal-button" id="start-game-button">
+        Start Game
+      </button>
+    </div>
+  </dialog>
 
-    <dialog class="modal" id="game-over-modal" style="display: flex">
-      <h2>Game Over</h2>
-      <p>Here are the words you encountered</p>
-      <div id="words-encountered">
-        <table id="words-encountered-table">
-          <tr>
-            <th>Word</th>
-            <th>Definition</th>
-            <th>Part of Speech</th>
-          </tr>
-          <tr>
-            <td>Fish</td>
-            <td>It swims</td>
-            <td>noun</td>
-          </tr>
-          <tr>
-            <td>Test</td>
-            <td>Something to test the test</td>
-            <td>verb</td>
-          </tr>
-          <tr>
-            <td>TestTest 123</td>
-            <td>A way for me to test how this looks</td>
-            <td>verb</td>
-          </tr>
-        </table>
-      </div>
-      <div>
-        <button class="button modal-button" id="start-menu-button">
-          Start Menu
-        </button>
-        <button class="button modal-button" id="replay-game-button">
-          Replay Game
-        </button>
-      </div>
-    </dialog>
+  <dialog class="modal" id="how-to-play-modal">
+    <h2>How To Play</h2>
+    <p>
+      Welcome to Dictionary Dash! Your objective is to provide a match to the
+      given definition by inputting its corresponding word. You will have 60
+      seconds to rack up as many points as possible. When the timer reaches 0,
+      the game ends. Don't worry though, with every correct answer, you'll
+      earn an additional 5 seconds on your timer.
+    </p>
+    <button class="button modal-button" id="close-how-to-play-modal">
+      Close
+    </button>
+  </dialog>
 
-    <script type="module" src="game.js"></script>
-  </body>
+  <dialog class="modal" id="game-over-modal">
+    <h2>Game Over</h2>
+    <p>Here are the words you encountered</p>
+    <div id="words-encountered">
+      <table id="words-encountered-table">
+
+      </table>
+    </div>
+    <div>
+      <button class="button modal-button" id="start-menu-button">
+        Start Menu
+      </button>
+    </div>
+  </dialog>
+
+  <script type="module" src="game.js"></script>
+</body>
+
 </html>

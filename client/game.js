@@ -29,7 +29,7 @@ const wordsEncounteredTable = document.getElementById(
 );
 
 class Game {
-  static timeLeft = 10;
+  static timeLeft = 60;
   static wordsGenerated = [];
   static wordsCompleted = [];
   static correctCount = 0;
@@ -59,14 +59,12 @@ class Game {
     try {
       const response = await fetch(url);
       const data = await response.json();
+
       this.wordsGenerated.push(...data);
+
     } catch (error) {
       console.log({ error: error.message });
     }
-  }
-
-  static skipWord() {
-    this.timeLeft -= 3;
   }
 
   static checkInput() {
@@ -76,30 +74,30 @@ class Game {
       this.correctCount++;
       correctCount.textContent = this.correctCount;
       this.setCurrentWord();
-      //I need to make sure there are generated words ahead of time
+
       if (this.correctCount >= this.wordsGenerated.length - 2) {
-        this.generateWords(3).then(() => {
-          this.setCurrentWord();
-        });
+        this.generateWords(3);
       }
     }
   }
 
   static async setCurrentWord() {
     this.currentWord = this.wordsGenerated[this.correctCount];
+
     partOfSpeech.textContent = this.currentWord.partOfSpeech;
     definition.textContent = this.currentWord.definition;
+
     console.log(this.currentWord);
   }
 
   static endGame() {
     this.isGameOver = true;
-    this.wordsCompleted = this.wordsGenerated.splice(0, this.correctCount);
+    this.wordsCompleted = this.wordsGenerated.splice(0, this.correctCount + 1);
     let tableRows = `
     <tr>
       <th>Word</th>
-      <th>Definition</th>
       <th>Part of Speech</th>
+      <th>Definition</th>
     </tr>`;
     for (let i = 0; i < this.wordsCompleted.length; i++) {
       tableRows += `
@@ -112,6 +110,19 @@ class Game {
     }
     wordsEncounteredTable.innerHTML = tableRows;
     GameOverModal.style.display = "flex";
+  }
+
+  static reset() {
+    this.isGameOver = true;
+    this.wordsGenerated = [];
+    this.wordsCompleted = [];
+    this.difficulty = "";
+    this.correctCount = 0;
+    this.currentWord = ''
+    this.timeLeft = 60;
+    partOfSpeech.textContent = '';
+    definition.textContent = '';
+    correctCount.textContent = 0;
   }
 }
 
@@ -147,3 +158,12 @@ startGameButton.addEventListener("click", () => {
 wordInput.addEventListener("keyup", () => {
   Game.checkInput();
 });
+
+startMenuButton.addEventListener("click", () => {
+  GameOverModal.close();
+  GameOverModal.style.display = "none";
+  gameContainer.style.display = "none";
+  startOptionsModal.style.display = "none";
+  startContainer.style.display = "flex";
+  Game.reset();
+})

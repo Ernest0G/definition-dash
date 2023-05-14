@@ -21,7 +21,6 @@ app.get("/randomWord/:numberOfWords/:difficulty", async (req, res) => {
     case "Medium":
       difficulty.min = 6;
       difficulty.max = 8;
-
       break;
     case "Hard":
       difficulty.min = 9;
@@ -35,7 +34,7 @@ app.get("/randomWord/:numberOfWords/:difficulty", async (req, res) => {
     method: "GET",
     headers: {
       "X-RapidAPI-Key": apiKey,
-      "X-RapidAPI-Host": "wordsapiv1.p.rapidapi.com",
+      'X-RapidAPI-Host': 'wordsapiv1.p.rapidapi.com'
     },
   };
   try {
