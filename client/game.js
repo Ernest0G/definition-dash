@@ -4,14 +4,10 @@ const gameContainer = document.getElementById("game-container");
 const gameSetUpButton = document.getElementById("game-setup-button");
 const howToPlayButton = document.getElementById("how-to-play-button");
 const howToPLayModal = document.getElementById("how-to-play-modal");
-const closeHowToPlayModalButton = document.getElementById(
-  "close-how-to-play-modal"
-);
+const closeHowToPlayModalButton = document.getElementById("close-how-to-play-modal");
 const startOptionsModal = document.getElementById("start-options-modal");
 const startGameButton = document.getElementById("start-game-button");
-const closeStartOptionsModalButton = document.getElementById(
-  "close-start-options-modal"
-);
+const closeStartOptionsModalButton = document.getElementById("close-start-options-modal");
 const difficultySelector = document.getElementById("difficulty");
 
 //Game Screen ELements
@@ -21,12 +17,11 @@ const definition = document.getElementById("definition");
 const correctCount = document.getElementById("correct-count");
 const time = document.getElementById("time");
 
+//End Game Elements
 const GameOverModal = document.getElementById("game-over-modal");
 const replayGameButton = document.getElementById("replay-game-button");
 const startMenuButton = document.getElementById("start-menu-button");
-const wordsEncounteredTable = document.getElementById(
-  "words-encountered-table"
-);
+const wordsEncounteredTable = document.getElementById("words-encountered-table");
 
 class Game {
   static timeLeft = 60;
@@ -40,7 +35,6 @@ class Game {
   static async startGame() {
     await this.generateWords(4);
     await this.setCurrentWord();
-
     this.isGameOver = false;
     wordInput.focus();
     const gameClock = setInterval(() => {
@@ -59,9 +53,7 @@ class Game {
     try {
       const response = await fetch(url);
       const data = await response.json();
-
       this.wordsGenerated.push(...data);
-
     } catch (error) {
       console.log({ error: error.message });
     }
@@ -72,9 +64,9 @@ class Game {
       wordInput.value = "";
       this.timeLeft += 6;
       this.correctCount++;
+
       correctCount.textContent = this.correctCount;
       this.setCurrentWord();
-
       if (this.correctCount >= this.wordsGenerated.length - 2) {
         this.generateWords(3);
       }
@@ -83,7 +75,6 @@ class Game {
 
   static async setCurrentWord() {
     this.currentWord = this.wordsGenerated[this.correctCount];
-
     partOfSpeech.textContent = this.currentWord.partOfSpeech;
     definition.textContent = this.currentWord.definition;
 
